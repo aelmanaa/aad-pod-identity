@@ -1,0 +1,20 @@
+schedules:
+  - cron: "0 0 * * *"
+    displayName: "Nightly Build & Test"
+    branches:
+      include:
+        - master
+
+pool:
+  vmImage: ubuntu-latest
+
+jobs:
+  - template: .pipelines/unit-tests-template.yml
+  - template: .pipelines/e2e-tests-template.yml
+    parameters:
+      k8sReleases:
+        - "1.18"
+      clusterConfigs:
+        # File names in test/e2e/cluster_configs without file extension
+        - "vmss"
+        - "vmas"
